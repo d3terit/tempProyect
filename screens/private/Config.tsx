@@ -1,29 +1,79 @@
-import { StyleSheet, View, useColorScheme } from "react-native";
-import { Button, Text } from "@rneui/themed";
+import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
+import { Text } from "@rneui/themed";
+import Icon from 'react-native-vector-icons/Ionicons';
 import { useAuthentication } from "../../utils/hooks/useAuthentication";
 import { getAuth } from "@firebase/auth";
-import Theme, { DARK_THEME, LIGHT_THEME } from "../../shared/themes/theme";
-import { getDatabase, ref, set } from "@firebase/database";
+import Theme, { DARK_THEME, LIGHT_THEME, SYSTEM_THEME } from "../../shared/themes/theme";
+import { getDatabase, onValue, ref, set } from "@firebase/database";
+import React, { useEffect } from "react";
 
 export default function Config() {
     const { user } = useAuthentication();
     const auth = getAuth();
     const db = getDatabase();
-    const colorScheme = useColorScheme();
-    const changeTheme = (theme: any) => {
-        const dbTheme = ref(db, 'users/' + user?.uid + '/theme');
-        set(dbTheme, theme);
+    const [currentAvatar, setCurrentAvatar] = React.useState('y-bot');
+    useEffect(() => {
+        if (user?.uid) {
+          const dbAvatar = ref(db, 'users/' + user.uid + '/avatar');
+          onValue(dbAvatar, (snapshot) => {
+            const data = snapshot.val();
+            if (data) setCurrentAvatar(data);
+          });
+        }
+      }, [user]);
+    const changeValue = (key: string, value: any) => {
+        const dbUser = ref(db, 'users/' + user?.uid + '/' + key);
+        set(dbUser, value);
     }
+    const buttons = [
+        { title: 'Claro', theme: LIGHT_THEME },
+        { title: 'Oscuro', theme: DARK_THEME },
+        { title: 'Sistema', theme: SYSTEM_THEME },
+    ];
+    const avatars = [
+        { value: 'y-bot', img: require('../../assets/y-bot.png') },
+        { value: 'x-bot', img: require('../../assets/x-bot.png') },
+    ]
     return (
         <View style={styles.container}>
             <Text style={Theme.styles.titlePage}>Configuración</Text>
-            <Text style={[styles.text, {color:Theme.theme.colorPrimary}]}>Welcome {user?.email}!</Text>
-            <Text style={[styles.text, {color:Theme.theme.colorPrimary}]}>Verified: {user?.emailVerified ? 'Yes' : 'No'}
-            </Text>
-            <Button title="Claro" style={styles.button} onPress={() => changeTheme(LIGHT_THEME)} />
-            <Button title="Oscuro" style={styles.button} onPress={() => changeTheme(DARK_THEME)} />
-            <Button title="Sistema" style={styles.button} onPress={() => changeTheme(colorScheme)} />
-            <Button title="Cerrar sesión" style={styles.button} onPress={() => auth.signOut()} />
+            <View style={styles.mainConfig}>
+                <Text style={[styles.titleSection, { color: Theme.theme.colortTextPrimary }]}>Tema</Text>
+                <View style={styles.groupButtons}>
+                    {buttons.map((button, index) => (
+                        <TouchableOpacity key={index} onPress={() => changeValue('theme',button.theme)}
+                            style={[styles.button, {
+                                borderColor: button.theme === Theme.currentTheme ? Theme.theme.colorPrimary : Theme.theme.borderColor,
+                                backgroundColor: Theme.theme.secondaryColor
+                            }]} activeOpacity={.5}>
+                            <Text style={[styles.text, { color: Theme.theme.colortTextPrimary }]}>{button.title}</Text>
+                        </TouchableOpacity>
+                    ))}
+                </View>
+                <Text style={[styles.titleSection, { color: Theme.theme.colortTextPrimary }]}>Avatar seleccionado</Text>
+                <View style={styles.groupButtons}>
+                    {avatars.map((button, index) => (
+                        <TouchableOpacity key={index} onPress={() => changeValue('avatar',button.value)}
+                            style={[styles.buttonAvatar, {
+                                width: '45%',
+                                borderColor: button.value === currentAvatar ? Theme.theme.colorPrimary : Theme.theme.borderColor,
+                                backgroundColor: Theme.theme.secondaryColor
+                            }]} activeOpacity={.5}>
+                            <Image source={button.img} style={styles.img} />
+                        </TouchableOpacity>
+                    ))}
+                </View>
+                {/* <Text style={[styles.titleSection, { color: Theme.theme.colortTextPrimary }]}>Perfil</Text>
+                <Text style={[styles.titleSection, { color: Theme.theme.colortTextPrimary }]}>Correo: {user?.email}!</Text>
+                <Text style={[styles.titleSection, { color: Theme.theme.colortTextPrimary }]}>Verificado: {user?.emailVerified ? 'Si' : 'No'}</Text> */}
+                <View style={styles.contentLogout}>
+                    <TouchableOpacity style={styles.logoutButton} onPress={() => auth.signOut()} activeOpacity={.5}>
+                        <Text style={styles.lightText}>Cerrar sesión</Text>
+                        <Icon name="log-out-outline" size={30} style={styles.icon} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+
         </View>);
 }
 const styles = StyleSheet.create({
@@ -32,11 +82,57 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingTop: 30,
     },
+    mainConfig: {
+        paddingHorizontal: 25,
+        paddingTop: 20,
+    },
+    titleSection: {
+        fontSize: 18,
+        marginTop: 20,
+    },
+    groupButtons: {
+        marginVertical: 15,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
     text: {
-        fontSize: 20,
-        marginBottom: 20
+        fontSize: 18,
+    },
+    lightText: {
+        fontSize: 18,
+        color: '#ebebeb',
     },
     button: {
-        marginTop: 10
+        borderRadius: 15,
+        borderWidth: 2,
+        paddingHorizontal: 20,
+        paddingVertical: 5,
     },
+    buttonAvatar: {
+        borderRadius: 15,
+        borderWidth: 2,
+    },
+    contentLogout: {
+        marginTop: 40,
+        flexDirection: 'row',
+        justifyContent: 'center',
+
+    },
+    logoutButton: {
+        borderRadius: 15,
+        paddingHorizontal: 25,
+        paddingVertical: 12,
+        backgroundColor: Theme.theme.colorPrimary,
+        color: '#ebebeb',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    icon: {
+        marginLeft: 10,
+        color: '#ebebeb',
+    },
+    img: {
+        //darle el ancho del padre
+        width: '100%',
+    }
 });

@@ -3,19 +3,27 @@ import { StyleSheet, View } from "react-native";
 import { Text } from "@rneui/themed";
 import Icon from 'react-native-vector-icons/Ionicons';
 import Theme from "../themes/theme";
+import { getDatabase, ref, set } from "@firebase/database";
+import { useAuthentication } from "../../utils/hooks/useAuthentication";
 
 export default function CardPhrase({ phrase }: any) {
+    const { user } = useAuthentication();
+     const db = getDatabase();
+     const toggleFavorite = () => {
+        const dbUser = ref(db, 'users/' + user?.uid + '/phrases/' + phrase.key + '/favorite');
+        set(dbUser, !phrase.favorite);
+     }
     return (
         <TouchableOpacity activeOpacity={.5}>
-            <View style={[styles.card, { backgroundColor: Theme.theme.cardPrimary }]}>
+            <View style={[styles.card, { backgroundColor: Theme.theme.secondaryColor }]}>
                 <View style={styles.contentCard}>
                     <View style={styles.cardHeader}>
-                        <Icon name="calendar-outline" size={15} color={Theme.theme.colorPrimary} />
-                        <Text style={[styles.dateText, { color: Theme.theme.colorPrimary }]}>{phrase.date}</Text>
+                        <Icon name="calendar-outline" size={15} color={Theme.theme.colortTextPrimary} />
+                        <Text style={[styles.dateText, { color: Theme.theme.colortTextPrimary }]}>{phrase.date}</Text>
                     </View>
-                    <Text style={[styles.cardText, { color: Theme.theme.colorPrimary }]}>{phrase.content}</Text>
+                    <Text style={[styles.cardText, { color: Theme.theme.colortTextPrimary }]}>{phrase.content}</Text>
                 </View>
-                <TouchableOpacity activeOpacity={.5} style={styles.likeButton}>
+                <TouchableOpacity activeOpacity={.5} style={styles.likeButton} onPress={() => toggleFavorite()}>
                     <Icon name={phrase.favorite ? "heart" : "heart-outline"} size={30}
                         color={phrase.favorite ? '#C43434' : '#555555'} />
                 </TouchableOpacity>

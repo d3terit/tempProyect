@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useAuthentication } from '../../utils/hooks/useAuthentication';
 import { get, getDatabase, ref, set } from '@firebase/database';
 import Menu from '../../shared/components/Menu';

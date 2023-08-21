@@ -11,32 +11,24 @@ import Theme from "../../shared/themes/theme";
 export default function History() {
     const { user } = useAuthentication();
     const db = getDatabase();
+    const [phrases, setPhrases] = React.useState<any[]>([]);
     useEffect(() => {
         if (user?.uid) {
             const dbUsers = ref(db, 'users/' + user.uid + '/phrases');
             onValue(dbUsers, (snapshot:any) => {
                 const data = snapshot.val();
-                console.log(data);
+                if (data) {
+                    const phrases = Object.keys(data).map(key => {
+                        return {
+                            ...data[key],
+                            key: key,
+                        }
+                    });
+                    setPhrases(phrases);
+                }
             });
         }
     }, [user]);
-    const phrases = [
-        {
-            uid: '1',
-            content: 'Hola mundo',
-            date: '29/01/2023 12:45 p.m.',
-            favorite: true,
-        },
-    ]
-    //hacer un for 10 y duplicar el objeto para que se vea el scroll
-    for (let i = 0; i < 10; i++) {
-        phrases.push({
-            uid: '1',
-            content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit vel, porta felis habitant.',
-            date: '29/01/2023 12:45 p.m.',
-            favorite: i % 3 === 0,
-        });
-    }
     const [viewFavorites, setViewFavorites] = React.useState(false);
     return (
         <View style={styles.container}>
@@ -44,13 +36,13 @@ export default function History() {
             <View style={styles.toggleContainer}>
                 <TouchableOpacity activeOpacity={.5} style={[styles.toggleView, !viewFavorites && styles.activeToggleView]}
                     onPress={() => setViewFavorites(false)}>
-                    <Text style={[styles.textToogle, { color: Theme.theme.colorPrimary }, !viewFavorites && styles.activeToggle]}>
+                    <Text style={[styles.textToogle, { color: Theme.theme.colortTextPrimary }, !viewFavorites && styles.activeToggle]}>
                         Todos
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={.5} style={[styles.toggleView, viewFavorites && styles.activeToggleView]}
                     onPress={() => setViewFavorites(true)}>
-                    <Text style={[styles.textToogle, { color: Theme.theme.colorPrimary }, viewFavorites && styles.activeToggle]}>
+                    <Text style={[styles.textToogle, { color: Theme.theme.colortTextPrimary }, viewFavorites && styles.activeToggle]}>
                         Favoritos
                     </Text>
                 </TouchableOpacity>

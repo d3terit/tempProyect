@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Input, Button } from '@rneui/themed';
+import { Button } from '@rneui/themed';
 import { StackScreenProps } from '@react-navigation/stack';
 import { createUserWithEmailAndPassword, getAuth, sendEmailVerification } from '@firebase/auth';
 import { TouchableWithoutFeedback } from 'react-native';
@@ -47,7 +47,7 @@ const SignUpScreen: React.FC<StackScreenProps<any>> = ({ navigation }) => {
 
   return (
     <View style={[styles.container, { backgroundColor: Theme.theme.backgroundPrimary }]}>
-      <Text style={[styles.titleSection, { color: Theme.theme.colorPrimary }]}>Registrarse</Text>
+      <Text style={[styles.titleSection, { color: Theme.theme.colortTextPrimary }]}>Registrarse</Text>
 
       {!!value.error && <View style={styles.error}><Text>{value.error}</Text></View>}
       <View style={styles.iconBgContainer}>
@@ -56,13 +56,13 @@ const SignUpScreen: React.FC<StackScreenProps<any>> = ({ navigation }) => {
 
       <View style={styles.controls}>
         <TouchableWithoutFeedback onPress={() => { emailInput?.focus() }}>
-          <View style={[styles.control, { backgroundColor: Theme.theme.cardPrimary }]}>
-          <Icon name="mail-outline" size={30} style={[styles.icon, {color:Theme.theme.colorPrimary}]} />
+          <View style={[styles.control, { backgroundColor: Theme.theme.secondaryColor }]}>
+          <Icon name="mail-outline" size={30} style={[styles.icon, {color:Theme.theme.colortTextPrimary}]} />
             <View style={styles.inputContainer}>
-              <Text style={[styles.label, { color: Theme.theme.colorPrimary }]}>Correo</Text>
+              <Text style={[styles.label, { color: Theme.theme.colortTextPrimary }]}>Correo</Text>
               <TextInput
                 ref={input => { emailInput = input }}
-                style={[styles.input, { color: Theme.theme.colorPrimary }]}
+                style={[styles.input, { color: Theme.theme.colortTextPrimary }]}
                 autoComplete="email"
                 value={value.email}
                 onChangeText={(text) => setValue({ ...value, email: text })}
@@ -71,13 +71,13 @@ const SignUpScreen: React.FC<StackScreenProps<any>> = ({ navigation }) => {
           </View>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback onPress={() => { passwordInput?.focus() }}>
-          <View style={[styles.control, { backgroundColor: Theme.theme.cardPrimary }]}>
-          <Icon name="key-outline" size={30} style={[styles.icon, {color:Theme.theme.colorPrimary}]} />
+          <View style={[styles.control, { backgroundColor: Theme.theme.secondaryColor }]}>
+          <Icon name="key-outline" size={30} style={[styles.icon, {color:Theme.theme.colortTextPrimary}]} />
             <View style={styles.inputContainer}>
-              <Text style={[styles.label, { color: Theme.theme.colorPrimary }]}>Contraseña</Text>
+              <Text style={[styles.label, { color: Theme.theme.colortTextPrimary }]}>Contraseña</Text>
               <TextInput
                 ref={input => { passwordInput = input }}
-                style={[styles.input, { color: Theme.theme.colorPrimary }]}
+                style={[styles.input, { color: Theme.theme.colortTextPrimary }]}
                 value={value.password}
                 secureTextEntry={!showPassword}
                 onChangeText={(text) => setValue({ ...value, password: text })}
@@ -114,7 +114,7 @@ const SignUpScreen: React.FC<StackScreenProps<any>> = ({ navigation }) => {
             buttonStyle={styles.signinButton} onPress={signUp} />
         </View>
         <View style={styles.footer}>
-          <Text style={[styles.infoText, { color: Theme.theme.colorPrimary }]}>¿Ya tienens una cuenta?</Text>
+          <Text style={[styles.infoText, { color: Theme.theme.colortTextPrimary }]}>¿Ya tienens una cuenta?</Text>
           <TouchableWithoutFeedback onPress={() => navigation.navigate('sign-in')}>
             <Text style={styles.link}>Iniciar sesión</Text>
           </TouchableWithoutFeedback>

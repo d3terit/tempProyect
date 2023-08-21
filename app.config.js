@@ -4,6 +4,7 @@ export default {
   "expo": {
     "name": "inter-app",
     "slug": "inter-app",
+    "runtimeVersion": "1.0.0",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -29,6 +30,9 @@ export default {
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/88027de7-8d95-484f-88de-bd006c75ce2e"
     },
     "extra": {
       firebaseApiKey: process.env.FIREBASE_API_KEY,

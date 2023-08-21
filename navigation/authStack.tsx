@@ -21,10 +21,10 @@ export default function AuthStack({ logged }: any) {
           },
           headerBackImage: () => null,
         }}>
-        {logged ? <Stack.Screen name="private" component={LayoutScreen} />
+        {logged ? <Stack.Screen name="private" options={{headerShown: false}} component={LayoutScreen} />
           : <>
-            <Stack.Screen name="sign-in" component={SignInScreen} />
-            <Stack.Screen name="sign-up" component={SignOutScreen} />
+            <Stack.Screen name="sign-in" options={{headerShown: false}} component={SignInScreen} />
+            <Stack.Screen name="sign-up" options={{headerShown: false}} component={SignOutScreen} />
           </>
         }
       </Stack.Navigator>

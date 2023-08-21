@@ -42,7 +42,7 @@ const SignInScreen: React.FC<StackScreenProps<any>> = ({ navigation }:any) => {
 
   return (
       <View style={[styles.container,{backgroundColor: Theme.theme.backgroundPrimary}]}>
-        <Text style={[styles.titleSection, {color:Theme.theme.colorPrimary}]}>Iniciar sesión</Text>
+        <Text style={[styles.titleSection, {color:Theme.theme.colortTextPrimary}]}>Iniciar sesión</Text>
 
         {!!value.error && <View style={styles.error}><Text>{value.error}</Text></View>}
         <View style={styles.iconBgContainer}>
@@ -51,13 +51,13 @@ const SignInScreen: React.FC<StackScreenProps<any>> = ({ navigation }:any) => {
 
         <View style={styles.controls}>
           <TouchableWithoutFeedback onPress={() => { emailInput?.focus() }}>
-            <View style={[styles.control, { backgroundColor: Theme.theme.cardPrimary}]}>
-              <Icon name="mail-outline" size={30} style={[styles.icon, {color:Theme.theme.colorPrimary}]} />
+            <View style={[styles.control, { backgroundColor: Theme.theme.secondaryColor}]}>
+              <Icon name="mail-outline" size={30} style={[styles.icon, {color:Theme.theme.colortTextPrimary}]} />
               <View style={styles.inputContainer}>
-                <Text style={[styles.label, {color:Theme.theme.colorPrimary}]}>Correo</Text>
+                <Text style={[styles.label, {color:Theme.theme.colortTextPrimary}]}>Correo</Text>
                 <TextInput
                   ref={input => { emailInput = input }}
-                  style={[styles.input, {color:Theme.theme.colorPrimary}]}
+                  style={[styles.input, {color:Theme.theme.colortTextPrimary}]}
                   autoComplete="email"	
                   value={value.email}
                   onChangeText={(text) => setValue({ ...value, email: text })}
@@ -66,13 +66,13 @@ const SignInScreen: React.FC<StackScreenProps<any>> = ({ navigation }:any) => {
             </View>
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback onPress={() => { passwordInput?.focus() }}>
-            <View style={[styles.control, { backgroundColor: Theme.theme.cardPrimary}]}>
-              <Icon name="key-outline" size={30} style={[styles.icon, {color:Theme.theme.colorPrimary}]} />
+            <View style={[styles.control, { backgroundColor: Theme.theme.secondaryColor}]}>
+              <Icon name="key-outline" size={30} style={[styles.icon, {color:Theme.theme.colortTextPrimary}]} />
               <View style={styles.inputContainer}>
-                <Text style={[styles.label, {color:Theme.theme.colorPrimary}]}>Contraseña</Text>
+                <Text style={[styles.label, {color:Theme.theme.colortTextPrimary}]}>Contraseña</Text>
                 <TextInput
                   ref={input => { passwordInput = input }}
-                  style={[styles.input, {color:Theme.theme.colorPrimary}]}
+                  style={[styles.input, {color:Theme.theme.colortTextPrimary}]}
                   value={value.password}
                   secureTextEntry={!showPassword}
                   onChangeText={(text) => setValue({ ...value, password: text })}
@@ -92,7 +92,7 @@ const SignInScreen: React.FC<StackScreenProps<any>> = ({ navigation }:any) => {
               buttonStyle={styles.signinButton} onPress={signIn} />
           </View>
           <View style={styles.footer}>
-            <Text style={[styles.infoText, {color:Theme.theme.colorPrimary}]}>¿No tienens una cuenta?</Text>
+            <Text style={[styles.infoText, {color:Theme.theme.colortTextPrimary}]}>¿No tienens una cuenta?</Text>
             <TouchableWithoutFeedback onPress={() => navigation.navigate('sign-up')}>
               <Text style={styles.link}>Registrate</Text>
             </TouchableWithoutFeedback>
