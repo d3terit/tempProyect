@@ -6,7 +6,7 @@ const darkTheme = {
     backgroundPrimary: '#0E0F11',
     secondaryColor: '#1C1E22',
     borderColor: '#262C35',
-    imgBackground: require('../../assets/cube-dark.png')
+    imgBackground: require('~assets/cube-dark.png')
 }
 
 const lightTheme = {
@@ -15,7 +15,7 @@ const lightTheme = {
     backgroundPrimary: '#F6F6F6',
     secondaryColor: '#EBEBEB',
     borderColor: '#DEDEDE',
-    imgBackground: require('../../assets/cube-light.png')
+    imgBackground: require('~assets/cube-light.png')
 }
 
 export const DARK_THEME = 'dark';
@@ -38,6 +38,7 @@ export default class Theme {
         else Theme.theme = Theme.systemTheme === DARK_THEME ? darkTheme : lightTheme;
         Theme.styles = StyleSheet.create({
             titlePage: {
+                marginTop: 25,
                 fontSize: 25,
                 textAlign: 'left',
                 color: Theme.theme.colortTextPrimary,

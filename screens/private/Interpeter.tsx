@@ -4,12 +4,13 @@ import { getDatabase, ref, onValue } from "@firebase/database";
 import React, { useEffect } from "react";
 import { useAuthentication } from "../../utils/hooks/useAuthentication";
 import InputPhrase from "../../shared/components/InputPhrase";
+import ContentAvatar from "../../shared/components/Avatar";
 
 export default function Interpreter() {
     const { user } = useAuthentication();
     const auth = getAuth();
     const db = getDatabase();
-    const [currentAvatar, setCurrentAvatar] = React.useState(require('../../assets/y-bot.png'));
+    const [currentAvatar, setCurrentAvatar] = React.useState(require('~assets/y-bot.png'));
     useEffect(() => {
         if (user?.uid) {
           const dbAvatar = ref(db, 'users/' + user.uid + '/avatar');
@@ -20,12 +21,13 @@ export default function Interpreter() {
         }
       }, [user]);
     const avatars = [
-        { value: 'y-bot', img: require('../../assets/y-bot.png') },
-        { value: 'x-bot', img: require('../../assets/x-bot.png') },
+        { value: 'y-bot', img: require('~assets/y-bot.png') },
+        { value: 'x-bot', img: require('~assets/x-bot.png') },
     ]
     return (
         <View style={styles.container}>
-            <Image source={currentAvatar} style={styles.img} />
+            {/* <Image source={currentAvatar} style={styles.img} /> */}
+            <ContentAvatar />
             <InputPhrase />
         </View>
     );

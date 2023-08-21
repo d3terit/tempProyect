@@ -31,8 +31,8 @@ export default function Config() {
         { title: 'Sistema', theme: SYSTEM_THEME },
     ];
     const avatars = [
-        { value: 'y-bot', img: require('../../assets/y-bot.png') },
-        { value: 'x-bot', img: require('../../assets/x-bot.png') },
+        { value: 'y-bot', img: require('~assets/y-bot.png') },
+        { value: 'x-bot', img: require('~assets/x-bot.png') },
     ]
     return (
         <View style={styles.container}>
