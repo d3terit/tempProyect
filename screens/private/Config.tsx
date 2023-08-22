@@ -11,7 +11,7 @@ export default function Config() {
     const { user } = useAuthentication();
     const auth = getAuth();
     const db = getDatabase();
-    const [currentAvatar, setCurrentAvatar] = React.useState('y-bot');
+    const [currentAvatar, setCurrentAvatar] = React.useState('ybot');
     useEffect(() => {
         if (user?.uid) {
           const dbAvatar = ref(db, 'users/' + user.uid + '/avatar');
@@ -31,8 +31,8 @@ export default function Config() {
         { title: 'Sistema', theme: SYSTEM_THEME },
     ];
     const avatars = [
-        { value: 'y-bot', img: require('~assets/y-bot.png') },
-        { value: 'x-bot', img: require('~assets/x-bot.png') },
+        { value: 'ybot', img: require('~assets/y-bot.png') },
+        { value: 'xbot', img: require('~assets/x-bot.png') },
     ]
     return (
         <View style={styles.container}>

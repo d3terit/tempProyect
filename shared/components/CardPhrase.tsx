@@ -6,7 +6,7 @@ import Theme from "../themes/theme";
 import { getDatabase, ref, set } from "@firebase/database";
 import { useAuthentication } from "../../utils/hooks/useAuthentication";
 
-export default function CardPhrase({ phrase }: any) {
+export default function CardPhrase({ phrase, playPhrase }: any) {
     const { user } = useAuthentication();
      const db = getDatabase();
      const toggleFavorite = () => {
@@ -14,7 +14,7 @@ export default function CardPhrase({ phrase }: any) {
         set(dbUser, !phrase.favorite);
      }
     return (
-        <TouchableOpacity activeOpacity={.5}>
+        <TouchableOpacity activeOpacity={.5} onPress={() => playPhrase(phrase.content)}>
             <View style={[styles.card, { backgroundColor: Theme.theme.secondaryColor }]}>
                 <View style={styles.contentCard}>
                     <View style={styles.cardHeader}>

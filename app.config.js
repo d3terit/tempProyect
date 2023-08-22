@@ -27,6 +27,7 @@ export default {
       },
       "package": "com.interapp.interapp",
       "versionCode": 1,
+      "permissions": ["NETWORK"]
     },
     "web": {
       "favicon": "./assets/favicon.png"

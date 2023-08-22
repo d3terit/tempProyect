@@ -5,33 +5,44 @@ import React, { useEffect } from "react";
 import { useAuthentication } from "../../utils/hooks/useAuthentication";
 import InputPhrase from "../../shared/components/InputPhrase";
 import ContentAvatar from "../../shared/components/Avatar";
+import { Text } from "@rneui/themed";
+import Theme from "../../shared/themes/theme";
+import Constants from "expo-constants";
 
-export default function Interpreter() {
-    const { user } = useAuthentication();
-    const auth = getAuth();
-    const db = getDatabase();
-    const [currentAvatar, setCurrentAvatar] = React.useState(require('~assets/y-bot.png'));
-    useEffect(() => {
-        if (user?.uid) {
-          const dbAvatar = ref(db, 'users/' + user.uid + '/avatar');
-          onValue(dbAvatar, (snapshot) => {
-            const data = snapshot.val();
-            if (data) setCurrentAvatar(avatars.find(avatar => avatar.value === data)?.img);
-          });
-        }
-      }, [user]);
-    const avatars = [
-        { value: 'y-bot', img: require('~assets/y-bot.png') },
-        { value: 'x-bot', img: require('~assets/x-bot.png') },
-    ]
+export default function Interpreter({currentPhrase, setCurrentPhrase, playPhrase}:any) {
+    // const { user } = useAuthentication();
+    // const auth = getAuth();
+    // const db = getDatabase();
+    // const [currentAvatar, setCurrentAvatar] = React.useState<any>(null);
+    // useEffect(() => {
+    //     if (user?.uid) {
+    //       const dbAvatar = ref(db, 'users/' + user.uid + '/avatar');
+    //       onValue(dbAvatar, (snapshot) => {
+    //         const data = snapshot.val();
+    //         // if (data) setCurrentAvatar(avatars.find(avatar => avatar.value === data)?.img);
+    //         if (data) setCurrentAvatar(require(`~assets/models/${data}.glb`));
+    //       });
+    //     }
+    //   }, [user]);
+    // console.log(currentAvatar);
     return (
         <View style={styles.container}>
-            {/* <Image source={currentAvatar} style={styles.img} /> */}
-            <ContentAvatar />
-            <InputPhrase />
+            <ContentAvatar currentPhrase={currentPhrase} setCurrentPhrase={setCurrentPhrase}/>
+            <CurrentText currentPhrase={currentPhrase}/>
+            <InputPhrase playPhrase={playPhrase}/>
         </View>
     );
 }
+
+
+const CurrentText = ({ currentPhrase }: any) => {
+    const text = currentPhrase.join(' ');
+    return (
+      <View style={styles.contentMessage}>
+        <Text style={{ fontSize: 20, color: Theme.theme.colortTextPrimary }}>{text}</Text>
+      </View>
+    );
+  }
 
 const styles = StyleSheet.create({
     container: {
@@ -44,5 +55,16 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         resizeMode: 'contain',
-    }
+    },
+    contentMessage: {
+        position: 'absolute',
+        top: Constants.statusBarHeight + 20,
+        left: 0,
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+        paddingHorizontal: 20,
+        backgroundColor: 'transparent',
+    },
 });

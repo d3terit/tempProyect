@@ -8,6 +8,8 @@ import History from './History';
 import Glossary from './Glossary';
 import Config from './Config';
 import Theme from '../../shared/themes/theme';
+import axios from 'axios';
+
 const routeComponents: any = {
   interpreter: Interpreter,
   history: History,
@@ -41,9 +43,20 @@ export default function LayoutScreen() {
   ];
   const [view, setView] = React.useState(routes[0].path);
   const RenderComponent = routeComponents[view];
+  const [currentPhrase, setCurrentPhrase] = React.useState([]);
+  const playPhrase = (phrase: string) => {
+    setView('interpreter');
+    axios.post('https://back-inter-jn38-dev.fl0.io/translate', { phrase: phrase })
+      .then((response:any) => {
+        setCurrentPhrase(response.data.result);
+      }, (error) => {
+        console.log(error);
+      }
+    );
+  }
   return (
     <View style={[styles.container, { backgroundColor: Theme.theme.backgroundPrimary }]}>
-      {RenderComponent && <RenderComponent />}
+      {RenderComponent && <RenderComponent currentPhrase={currentPhrase} setCurrentPhrase={setCurrentPhrase} playPhrase={playPhrase}/>}
       <Menu view={view} setView={setView} routes={routes} />
     </View>
   );

@@ -7,7 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useAuthentication } from '../../utils/hooks/useAuthentication';
 import { getDatabase, ref, set } from '@firebase/database';
 
-export default function InputPhrase() {
+export default function InputPhrase({playPhrase}:any) {
     const [isShow, setIsShow] = React.useState(false);
     const [value, setValue] = React.useState({ message: '' });
     const [isKeyboardVisible, setKeyboardVisible] = React.useState(false);
@@ -42,6 +42,7 @@ export default function InputPhrase() {
             favorite: false,
         }
         set(dbUser, newMessage);
+        playPhrase(value.message);
         setValue({ message: '' });
         setIsShow(false);
      }

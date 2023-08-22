@@ -8,7 +8,7 @@ import React from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import Theme from "../../shared/themes/theme";
 
-export default function History() {
+export default function History({ playPhrase }: any) {
     const { user } = useAuthentication();
     const db = getDatabase();
     const [phrases, setPhrases] = React.useState<any[]>([]);
@@ -55,7 +55,7 @@ export default function History() {
                     return true;
                 }).reverse().map((phrase, index) => {
                     return (
-                        <CardPhrase phrase={phrase} key={index} />
+                        <CardPhrase phrase={phrase} key={index} playPhrase={playPhrase} />
                     );
                 })}
                 <View style={{ height: 150 }}></View>
