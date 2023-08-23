@@ -15,7 +15,8 @@ export default {
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [
-      "**/*"
+      "**/*",
+      "assets/**/*.glb"
     ],
     "ios": {
       "supportsTablet": true,

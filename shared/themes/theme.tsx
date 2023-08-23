@@ -18,6 +18,11 @@ const lightTheme = {
     imgBackground: require('~assets/cube-light.png')
 }
 
+const InvariableValues = {
+    colorPrimary: '#0085FF',
+    colorAccent: '#FFB800'
+}
+
 export const DARK_THEME = 'dark';
 export const LIGHT_THEME = 'light';
 export const SYSTEM_THEME = 'system';
@@ -27,6 +32,7 @@ export default class Theme {
     static styles: any;
     static currentTheme = SYSTEM_THEME;
     static systemTheme = LIGHT_THEME;
+    static invariableValues = InvariableValues;
 
     static setSystemTheme(colorScheme: any) {
         Theme.systemTheme = colorScheme;

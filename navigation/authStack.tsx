@@ -20,6 +20,7 @@ export default function AuthStack({ logged }: any) {
             borderBottomWidth: 0,
           },
           headerBackImage: () => null,
+          headerBackground: () => Theme.theme.backgroundPrimary,
         }}>
         {logged ? <Stack.Screen name="private" options={{headerShown: false}} component={LayoutScreen} />
           : <>

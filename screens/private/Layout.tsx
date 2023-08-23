@@ -44,19 +44,25 @@ export default function LayoutScreen() {
   const [view, setView] = React.useState(routes[0].path);
   const RenderComponent = routeComponents[view];
   const [currentPhrase, setCurrentPhrase] = React.useState([]);
+  const [currentPhraseIndex, setCurrentPhraseIndex] = React.useState(0);
   const playPhrase = (phrase: string) => {
     setView('interpreter');
     axios.post('https://back-inter-jn38-dev.fl0.io/translate', { phrase: phrase })
       .then((response:any) => {
         setCurrentPhrase(response.data.result);
+        setCurrentPhraseIndex(0);
       }, (error) => {
         console.log(error);
       }
     );
   }
+  useEffect(() => {
+    if (view === 'interpreter') playPhrase('hola');
+  }, []);
   return (
     <View style={[styles.container, { backgroundColor: Theme.theme.backgroundPrimary }]}>
-      {RenderComponent && <RenderComponent currentPhrase={currentPhrase} setCurrentPhrase={setCurrentPhrase} playPhrase={playPhrase}/>}
+      {RenderComponent && <RenderComponent currentPhrase={currentPhrase}
+      currentPhraseIndex={currentPhraseIndex} setCurrentPhraseIndex={setCurrentPhraseIndex} playPhrase={playPhrase}/>}
       <Menu view={view} setView={setView} routes={routes} />
     </View>
   );

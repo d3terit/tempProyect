@@ -8,7 +8,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import Theme from '../themes/theme';
 import * as THREE from 'three';
 
-function Avatar({ currentPhrase, setCurrentPhrase }: any) {
+function Avatar({ currentPhrase, currentPhraseIndex, setCurrentPhraseIndex }: any) {
   new TextureLoader();
   const idleAnimation: any = useLoader(GLTFLoader, require('~assets/clips/idle.glb'));
   const avatarModel: any = useLoader(GLTFLoader, require('~assets/models/ybot.glb'));
@@ -45,77 +45,66 @@ function Avatar({ currentPhrase, setCurrentPhrase }: any) {
     ['y', useLoader(GLTFLoader, require('~assets/clips/abecedario/y.glb'))],
     ['z', useLoader(GLTFLoader, require('~assets/clips/abecedario/z.glb'))]
   ])
-  let currentAnimation:any = null;
-  let idTimeout:any = null;
+  const  [currentAnimation, setCurrentAnimation] = useState<any>(null); 
 
-  function getAnimation(char:any) {
-    return animationsMap.get(char)?.animations?.[0] || null;
+  function getAnimation(sign:any) {
+    return animationsMap.get(sign)?.animations?.[0] || null;
   }
 
   function playIdleAnimation() {
     const newAnimation = createAnimation(idleAnimation.animations[0], THREE.LoopRepeat);
     switchAnimation(newAnimation);
+    newAnimation.play();
   }
 
   function createAnimation(clip:any, loopType:any) {
     const animationAction:any = mixer.clipAction(clip, avatarModel.scene);
     animationAction.setLoop(loopType);
-    animationAction.clampWhenFinished = true;
     animationAction.setEffectiveWeight(1);
     animationAction.setEffectiveTimeScale(1);
     return animationAction;
   }
 
   function switchAnimation(newAnimation:any) {
-    if (currentAnimation) {
-      currentAnimation.stop();
-      mixer.removeEventListener('finished', onAnimationFinished);
+    if (currentAnimation) currentAnimation.crossFadeTo(newAnimation, 0.8, true);
+    else setCurrentAnimation(newAnimation);
+  }
+
+  function getNextIndexToAnimate() {
+    let nextIndex = currentPhraseIndex + 1;
+    while (nextIndex < currentPhrase.length && currentPhrase[nextIndex].sign === null) {
+      nextIndex++;
     }
-
-    newAnimation.play();
-    currentAnimation = newAnimation;
-    newAnimation.reset();
-
-    mixer.addEventListener('finished', onAnimationFinished);
+    return nextIndex;
   }
 
   function onAnimationFinished() {
     mixer.removeEventListener('finished', onAnimationFinished);
-
-    const remainingPhrase = currentPhrase.slice(1);
-    if (remainingPhrase.length) {
-      setCurrentPhrase(remainingPhrase);
-    } else {
-      playIdleAnimation();
-      setCurrentPhrase([]);
-    }
+    setCurrentPhraseIndex(getNextIndexToAnimate());
   }
 
-  function animateNextChar() {
-    const char = currentPhrase[0];
-    const nextAnimation = getAnimation(char);
+  function animateNextSign() {
+    const sign = currentPhrase[currentPhraseIndex].sign;
+    const nextAnimation = getAnimation(sign);
     if (!nextAnimation) {
-      setCurrentPhrase(currentPhrase.slice(1));
+      setCurrentPhraseIndex(getNextIndexToAnimate());
       return;
     }
     const newAnimation = createAnimation(nextAnimation, THREE.LoopOnce);
     newAnimation.clampWhenFinished = true;
     switchAnimation(newAnimation);
-    
     newAnimation.play();
-
     mixer.addEventListener('finished', onAnimationFinished);
   }
 
   useEffect(() => {
-    mixer = new THREE.AnimationMixer(avatarModel.scene);
-    if (currentPhrase.length) {
-      clearTimeout(idTimeout);
-      animateNextChar();
-    }else{
-      playIdleAnimation();
+    mixer = new THREE.AnimationMixer(avatarModel.scene)
+    if (currentPhrase.length && currentPhraseIndex < currentPhrase.length){
+      animateNextSign();
+      mixer.timeScale = 1.5;
     }
-  }, [currentPhrase]);
+    else playIdleAnimation();
+  }, [currentPhrase, currentPhraseIndex]);
 
   useFrame((state, delta) => {
     mixer.update(delta);
@@ -128,7 +117,7 @@ function Avatar({ currentPhrase, setCurrentPhrase }: any) {
   );
 }
 
-export default function ContentAvatar({ currentPhrase, setCurrentPhrase }: any) {
+export default function ContentAvatar({ currentPhrase, currentPhraseIndex, setCurrentPhraseIndex }: any) {
   const [OrbitControls, events] = useControls()
   const created = (state: any) => {
     const _gl = state.gl.getContext();
@@ -149,7 +138,7 @@ export default function ContentAvatar({ currentPhrase, setCurrentPhrase }: any) 
           <OrbitControls enablePan={false} enableZoom={false} />
           <ambientLight intensity={.2} />
           <pointLight position={[10, 10, 10]} intensity={0.5} />
-          <Avatar position={[0, 0, 0]} currentPhrase={currentPhrase} setCurrentPhrase={setCurrentPhrase} />
+          <Avatar position={[0, 0, 0]} currentPhrase={currentPhrase} currentPhraseIndex={currentPhraseIndex} setCurrentPhraseIndex={setCurrentPhraseIndex} />
         </Canvas>
       </Suspense>
     </View>

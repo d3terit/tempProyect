@@ -39,7 +39,7 @@ export default function Menu({ view, setView, routes }: any) {
     return (
         <>
             <LinearGradient
-                colors={[Theme.theme.backgroundPrimary, Theme.theme.backgroundPrimary+'e0','transparent']}
+                colors={[Theme.theme.backgroundPrimary, Theme.theme.backgroundPrimary+'c0','transparent']}
                 start={{ x: 1, y: 1 }}
                 end={{ x: 1, y: 0 }}  
                 style={styles.degree} 
